@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 800px; /* Define a max width for the container */
+    margin: 0 auto; /* Center the container */
+    padding: 20px;
+    border: 1px solid #ccc; /* Add border */
+    background-color: white; /* White background for the container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+h1 {
+    font-size: 1.8em; /* Adjusted size */
+}
+
+h2 {
+    font-size: 1.3em; /* Adjusted size */
+}
+
+label {
+    font-size: 0.95em; /* Adjusted size */
+}
+
+input[type="range"], input[type="number"] {
+    width: 100%;
+    margin: 5px 0;
+}
+
+.output {
+    font-size: 1em; /* Adjusted size */
+}
+
+.results-box {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #007BFF; /* Border color for the results box */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #e7f3ff; /* Light blue background for visibility */
+}
+
+.results-box p {
+    margin: 5px 0; /* Space out results */
+}
+
+.logo {
+    width: 100px; /* Adjust size as needed */
+    display: block;
+    margin: 0 auto 20px; /* Center the logo and add bottom margin */
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Expected ROI Calculator</title>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" class="logo">
+        </div>
+        <h1>Expected ROI Calculator</h1>
+        <p>Enter your metrics below to estimate your ROI. Adjust the metrics to see their impact.</p>
+        
+        <form method="POST">
+            <div class="input-group">
+                <label for="currency">Currency:</label>
+                <select id="currency" name="currency" onchange="updateResults()">
+                    <option value="usd" selected>USD</option>
+                    <option value="inr">INR</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="monthly_spend">Monthly Ad Spend:</label>
+                <input type="range" id="monthly_spend" name="monthly_spend" min="100" max="50000" step="1" value="5000" oninput="this.nextElementSibling.value = this.value">
+                <output>$5000</output>
+            </div>
+
+            <div class="input-group">
+                <label for="cpc">Cost Per Click (CPC):</label>
+                <input type="range" id="cpc" name="cpc" min="0.01" max="20" step="0.01" value="0.60" oninput="this.nextElementSibling.value = this.value">
+                <output>$0.60</output>
+            </div>
+
+            <div class="input-group">
+                <label for="opt_in_rate">Opt-In Conversion Rate (%):</label>
+                <input type="range" id="opt_in_rate" name="opt_in_rate" min="1" max="100" step="1" value="20" oninput="this.nextElementSibling.value = this.value">
+                <output>20%</output>
+            </div>
+
+            <div class="input-group">
+                <label for="lead_conversion_rate">Lead to Customer Conversion Rate (%):</label>
+                <input type="range" id="lead_conversion_rate" name="lead_conversion_rate" min="1" max="100" step="1" value="2" oninput="this.nextElementSibling.value = this.value">
+                <output>2%</output>
+            </div>
+
+            <div class="input-group">
+                <label for="average_sale_price">Average Sale Price:</label>
+                <input type="number" id="average_sale_price" name="average_sale_price" step="0.01" value="200" oninput="this.nextElementSibling.value = this.value">
+                <output>$200.00</output>
+            </div>
+
+            <button type="submit">Calculate ROI</button>
+        </form>
+
+        <div class="results-box">
+            {% if roi != 0 %}
+                <h2>Expected Results</h2>
+                <p><strong>Gross Revenue:</strong> {{ currency_symbol }}{{ "{:,}".format(gross_revenue) }}</p>
+                <p><strong>Net {{ "Loss" if net_result < 0 else "Profit" }}:</strong> {{ currency_symbol }}{{ "{:,}".format(abs(net_result)) }}</p>
+                <p><strong>ROI:</strong> {{ roi }}%</p>
+                
+                {% if roi < 0 %}
+                    <p><strong>Oh no! 😔 You'll lose {{ currency_symbol }}{{ "{:,.2f}".format(abs(net_result)) }}</strong></p>
+                    <p>Your {{ currency_symbol }}{{ "{:,.2f}".format(monthly_spend) }} ad spend will generate {{ currency_symbol }}{{ "{:,.2f}".format(gross_revenue) }} in revenue, which means you're getting {{ roi }}% ROI on your money.</p>
+                {% else %}
+                    <p><strong>Great! 😊 You'll profit {{ currency_symbol }}{{ "{:,.2f}".format(net_result) }}</strong></p>
+                    <p>Your {{ currency_symbol }}{{ "{:,.2f}".format(monthly_spend) }} ad spend will generate {{ currency_symbol }}{{ "{:,.2f}".format(gross_revenue) }} in revenue, which means you're getting {{ roi }}% ROI on your money.</p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+<script>
+    const monthlySpendInput = document.getElementById('monthly_spend');
+    const cpcInput = document.getElementById('cpc');
+    const optInRateInput = document.getElementById('opt_in_rate');
+    const leadConversionRateInput = document.getElementById('lead_conversion_rate');
+    const averageSalePriceInput = document.getElementById('average_sale_price');
+    const currencyInput = document.getElementById('currency');
+
+    const conversionRate = 84; // 1 USD = 84 INR
+
+    function calculateROI(monthlySpend, cpc, optInRate, leadConversionRate, averageSalePrice) {
+        const clicks = monthlySpend / cpc;
+        const leads = clicks * (optInRate / 100);
+        const customers = leads * (leadConversionRate / 100);
+        let grossRevenue = customers * averageSalePrice;
+        grossRevenue = Math.round(grossRevenue);
+        const netResult = grossRevenue - monthlySpend;
+        let roi = (netResult / monthlySpend) * 100;
+        roi = Math.round(roi);
+        return { grossRevenue, netResult, roi };
+    }
+
+    function updateResults() {
+        const currency = currencyInput.value;
+
+        // Adjust values based on currency selection
+        let adjustedMonthlySpend = parseFloat(monthlySpendInput.value);
+        let adjustedCPC = parseFloat(cpcInput.value);
+        let adjustedAverageSalePrice = parseFloat(averageSalePriceInput.value);
+
+        if (currency === 'inr') {
+            adjustedMonthlySpend *= conversionRate;
+            adjustedCPC *= conversionRate;
+            adjustedAverageSalePrice *= conversionRate;
+        }
+
+        const { grossRevenue, netResult, roi } = calculateROI(
+            adjustedMonthlySpend,
+            adjustedCPC,
+            parseFloat(optInRateInput.value),
+            parseFloat(leadConversionRateInput.value),
+            adjustedAverageSalePrice
+        );
+
+        // Update currency symbol based on selection
+        const currencySymbol = currency === 'usd' ? '$' : '₹';
+
+        // Update range slider outputs to reflect the currency symbol
+        document.querySelectorAll('output').forEach(output => {
+            let value = parseFloat(output.previousElementSibling.value);
+            if (currency === 'inr' && output.previousElementSibling.id !== 'opt_in_rate' && output.previousElementSibling.id !== 'lead_conversion_rate') {
+                value *= conversionRate;
+            }
+            if (output.previousElementSibling.id !== 'opt_in_rate' && output.previousElementSibling.id !== 'lead_conversion_rate') {
+                output.value = `${currencySymbol}${value.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+            } else {
+                output.value = `${value}%`;
+            }
+        });
+
+        // Update results box with the calculated values
+        document.querySelector('.results-box').innerHTML = `
+            <h2>Expected Results</h2>
+            <p><strong>Gross Revenue:</strong> ${currencySymbol}${grossRevenue.toLocaleString()}</p>
+            <p><strong>Net ${netResult < 0 ? 'Loss' : 'Profit'}:</strong> ${currencySymbol}${Math.abs(netResult).toLocaleString()}</p>
+            <p><strong>ROI:</strong> ${roi}%</p>
+            ${roi < 0 
+                ? `<p><strong>Oh no! 😔 You'll lose ${currencySymbol}${Math.abs(netResult).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ${currency === 'usd' ? 'USD' : 'INR'}</strong></p>
+                   <p>Your ${currencySymbol}${monthlySpendInput.value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ad spend will generate ${currencySymbol}${grossRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} in revenue, which means you're getting ${roi}% ROI on your money.</p>`
+                : `<p><strong>Great! 😊 You'll profit ${currencySymbol}${netResult.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ${currency === 'usd' ? 'USD' : 'INR'}</strong></p>
+                   <p>Your ${currencySymbol}${monthlySpendInput.value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ad spend will generate ${currencySymbol}${grossRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} in revenue, which means you're getting ${roi}% ROI on your money.</p>`
+            }
+        `;
+    }
+
+    monthlySpendInput.addEventListener('input', updateResults);
+    cpcInput.addEventListener('input', updateResults);
+    optInRateInput.addEventListener('input', updateResults);
+    leadConversionRateInput.addEventListener('input', updateResults);
+    averageSalePriceInput.addEventListener('input', updateResults);
+</script>
+</body>
+</html>
