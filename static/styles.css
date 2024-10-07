@@ -14,7 +14,7 @@ body {
     max-width: 800px; /* Define a max width for the container */
     margin: 0 auto; /* Center the container */
     padding: 20px;
-    border: 0.7px solid red; /* Add border */
+    border: 0.7px solid #01063b; /* Add border */
     background-color: rgb(107, 4, 4); /* White background for the container */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
 }
