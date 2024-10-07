@@ -2,15 +2,20 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #f4f4f4;
+    background: linear-gradient(
+        to right,
+        #7b0505 0%,
+        #000000 50%,
+        #01063b 100%
+      );
 }
 
 .container {
     max-width: 800px; /* Define a max width for the container */
     margin: 0 auto; /* Center the container */
     padding: 20px;
-    border: 1px solid #ccc; /* Add border */
-    background-color: white; /* White background for the container */
+    border: 0.7px solid red; /* Add border */
+    background-color: rgb(107, 4, 4); /* White background for the container */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
 }
 
@@ -38,9 +43,9 @@ input[type="range"], input[type="number"] {
 .results-box {
     margin-top: 20px;
     padding: 15px;
-    border: 1px solid #007BFF; /* Border color for the results box */
+    border: 1px solid #07203b; /* Border color for the results box */
     border-radius: 5px; /* Rounded corners */
-    background-color: #e7f3ff; /* Light blue background for visibility */
+    background-color: white; /* Light blue background for visibility */
 }
 
 .results-box p {
@@ -50,5 +55,6 @@ input[type="range"], input[type="number"] {
 .logo {
     width: 100px; /* Adjust size as needed */
     display: block;
-    margin: 0 auto 20px; /* Center the logo and add bottom margin */
+    margin: 0 auto 20px;
+    background-color: #031a31; /* Center the logo and add bottom margin */
 }
