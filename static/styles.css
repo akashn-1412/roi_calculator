@@ -28,7 +28,7 @@ h1 {
 
 h2 {
     font-size: 1.3em; /* Adjusted size */
-    color: #f8f8f8; /* Light color for readability */
+    color: black; /* Light color for readability */
 }
 
 label {
@@ -43,6 +43,7 @@ input[type="range"], input[type="number"] {
 
 .output {
     font-size: 1em; /* Adjusted size */
+    color: black;
 }
 
 .results-box {
