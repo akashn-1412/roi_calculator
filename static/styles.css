@@ -7,28 +7,33 @@ body {
         #7b0505 0%,
         #000000 50%,
         #01063b 100%
-      );
+    );
+    color: white; /* Make text readable against dark gradient */
 }
 
 .container {
     max-width: 800px; /* Define a max width for the container */
     margin: 0 auto; /* Center the container */
     padding: 20px;
-    border: 0.7px solid #01063b; /* Add border */
-    background-color: rgb(107, 4, 4); /* White background for the container */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
+    border: 1px solid #01063b; /* Add border, slightly thicker for visibility */
+    background-color: #6b0404; /* Adjust background for better contrast with text */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Make the shadow more visible */
+    color: white; /* Ensuring text color contrasts well with dark background */
 }
 
 h1 {
     font-size: 1.8em; /* Adjusted size */
+    color: #f8f8f8; /* Light color to ensure readability */
 }
 
 h2 {
     font-size: 1.3em; /* Adjusted size */
+    color: #f8f8f8; /* Light color for readability */
 }
 
 label {
     font-size: 0.95em; /* Adjusted size */
+    color: #ffffff; /* Ensuring readability against dark background */
 }
 
 input[type="range"], input[type="number"] {
@@ -45,7 +50,8 @@ input[type="range"], input[type="number"] {
     padding: 15px;
     border: 1px solid #07203b; /* Border color for the results box */
     border-radius: 5px; /* Rounded corners */
-    background-color: white; /* Light blue background for visibility */
+    background-color: #ffffff; /* Changed to white for visibility of text */
+    color: #000000; /* Black text to contrast with light background */
 }
 
 .results-box p {
@@ -55,6 +61,6 @@ input[type="range"], input[type="number"] {
 .logo {
     width: 100px; /* Adjust size as needed */
     display: block;
-    margin: 0 auto 20px;
-    background-color: #031a31; /* Center the logo and add bottom margin */
+    margin: 0 auto 20px; /* Center the logo and add bottom margin */
+    background-color: #031a31; /* Background color for better visual separation */
 }
